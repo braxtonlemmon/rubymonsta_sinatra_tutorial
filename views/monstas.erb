@@ -1,4 +1,4 @@
-<% if @name %>
+<% unless @name.to_s.empty? %>
   <h1>Hello <%= @name %>!</h1>
 <% end %>
 

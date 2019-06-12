@@ -1,5 +1,6 @@
 require "sinatra"
 require "erb"
+require_relative "NameValidator"
 
 def store_name(filename, string)
 	File.open(filename, "a+") do |file|
@@ -21,9 +22,19 @@ get "/monstas" do
 	erb :monstas
 end
 
+
+
 post "/monstas" do
 	@name = params["name"]
-	store_name("names.txt", @name)
-	session[:message] = "Successfully stored the name #{@name}."
-	redirect "/monstas?name=#{@name}"
+	@names = read_names
+	validator = NameValidator.new(@name, @names)
+	
+	if validator.valid?
+		store_name("names.txt", @name)
+		session[:message] = "Successfully stored the name #{@name}."
+		redirect "/monstas?name=#{@name}"
+	else
+		@message = validator.message
+		erb :monstas
+	end
 end
