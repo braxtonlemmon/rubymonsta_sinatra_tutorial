@@ -22,8 +22,6 @@ get "/monstas" do
 	erb :monstas
 end
 
-
-
 post "/monstas" do
 	@name = params["name"]
 	@names = read_names
