@@ -12,9 +12,18 @@ def read_names
 	File.read("names.txt").split("\n")
 end
 
+enable :sessions
+
 get "/monstas" do
+	@message = session[:message]
 	@name = params["name"]
 	@names = read_names
-	store_name("names.txt", @name)
 	erb :monstas
+end
+
+post "/monstas" do
+	@name = params["name"]
+	store_name("names.txt", @name)
+	session[:message] = "Successfully stored the name #{@name}."
+	redirect "/monstas?name=#{@name}"
 end
